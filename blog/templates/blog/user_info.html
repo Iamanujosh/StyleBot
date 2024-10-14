@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleSnap User Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        .options-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .option {
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            width: 30%;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+        .option img {
+            width: 50px;
+        }
+        .option:hover {
+            background-color: #eaeaea;
+        }
+        .option.active {
+            background-color: #d3e5ff;
+            border-color: #007bff;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Personal Information</h1>
+    <p>Please provide your details below.</p>
+    <form action="/submit" method="POST">
+        <!-- Hidden fields to store the selected values -->
+        <input type="hidden" id="selectedBodyType" name="bodyType">
+        <input type="hidden" id="selectedSkinTone" name="skinTone">
+        <label>Body Type</label>
+        <div class="options-group">
+            <div class="option bodyType" onclick="selectOption('bodyType', 'Apple')">
+                <img src="apple.png" alt="Apple body type">
+                <p>Apple</p>
+            </div>
+            <div class="option bodyType" onclick="selectOption('bodyType', 'Pear')">
+                <img src="pear.png" alt="Pear body type">
+                <p>Pear</p>
+            </div>
+            <div class="option bodyType" onclick="selectOption('bodyType', 'Hourglass')">
+                <img src="hourglass.png" alt="Hourglass body type">
+                <p>Hourglass</p>
+            </div>
+        </div>
+        <div class="options-group">
+            <div class="option bodyType" onclick="selectOption('bodyType', 'Rectangle')">
+                <img src="rectangle.png" alt="Rectangle body type">
+                <p>Rectangle</p>
+            </div>
+            <div class="option bodyType" onclick="selectOption('bodyType', 'Curvy')">
+                <img src="curvy.png" alt="Curvy body type">
+                <p>Curvy</p>
+            </div>
+            <div class="option bodyType" onclick="selectOption('bodyType', 'Plus Size')">
+                <img src="plus_size.png" alt="Plus Size body type">
+                <p>Plus Size</p>
+            </div>
+        </div>
+        <label>Skin Tone</label>
+        <div class="options-group">
+            <div class="option skinTone" onclick="selectOption('skinTone', 'Fair')">
+                <img src="fair.png" alt="Fair skin tone">
+                <p>Fair</p>
+            </div>
+            <div class="option skinTone" onclick="selectOption('skinTone', 'Medium')">
+                <img src="medium.png" alt="Medium skin tone">
+                <p>Medium</p>
+            </div>
+            <div class="option skinTone" onclick="selectOption('skinTone', 'Olive')">
+                <img src="olive.png" alt="Olive skin tone">
+                <p>Olive</p>
+            </div>
+        </div>
+        <div class="options-group">
+            <div class="option skinTone" onclick="selectOption('skinTone', 'Dark')">
+                <img src="dark.png" alt="Dark skin tone">
+                <p>Dark</p>
+            </div>
+        </div>
+        <label for="height">Height (cm)</label>
+        <input type="number" id="height" name="height" placeholder="Enter height in cm" required>
+        <label for="weight">Weight (kg)</label>
+        <input type="number" id="weight" name="weight" placeholder="Enter weight in kg" required>
+        <label for="location">Location/Climate</label>
+        <input type="text" id="location" name="location" placeholder="Enter your location or climate" required>
+        <label for="ageGroup">Age Group</label>
+        <select id="ageGroup" name="ageGroup" required>
+            <option value="">Select age group</option>
+            <option value="Teens">Teens (13-19)</option>
+            <option value="20s">20s</option>
+            <option value="30s">30s</option>
+            <option value="40s">40s and above</option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        function selectOption(type, value) {
+            // Remove active class from previous selections
+            document.querySelectorAll('.' + type).forEach(function(element) {
+                element.classList.remove('active');
+            });
+            // Add active class to selected element
+            const selectedElement = document.querySelector(`[onclick="selectOption('${type}', '${value}')"]`);
+            selectedElement.classList.add('active');
+            // Update hidden field value
+            document.getElementById(`selected${capitalize(type)}`).value = value;
+        }
+        function capitalize(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Bot</title>
+    <style>
+        body {
+        
+            /* Use the uploaded image here */
+            background-image: url('https://wallpapers.com/images/featured/pastel-aesthetic-pictures-7m6fad3x90p3x6nz.jpg');
+            background-size: contain; /* Cover the entire screen */
+            background-position: left;
+            background-position: right; /* Center the background image */
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #E6E6FA;
+        }
+        .chat-container {
+            
+            width: 1340px;
+            max-width: 900px;
+            max-height: 1222px;
+            margin: 0 auto;
+            /* Semi-transparent background for better visibility */
+            /* border: 1px solid #ccc; */
+            /* border-radius: 10px; */
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: #D3D3D3;
+        }
+        .chat-messages {
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #F3E5F5;
+            background-size: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            
+        }
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .message.user {
+            background-color: #98FF98;
+            color: #333;
+            text-align: right;
+        }
+        .message.bot {
+            background-color: #ADD8E6;
+            color: #333;
+            text-align: left;
+        }
+        .chat-input {
+            display: flex;
+            justify-content: space-between;
+        }
+        .chat-input input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .chat-input button {
+            background-color: #9B59B6;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            width: 80px;
+            cursor: pointer;
+        }
+        .chat-input button:hover {
+            background-color: #2ea043;
+        }
+        .custom-file-upload {
+            background-color: #9B59B6;
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 8px 16px;
+            text-align: center;
+            margin-left: 10px;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #2ea043;
+        }
+
+        /* Card Styles */
+        .info-card {
+            background-color: #2b303b;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .info-card h3 {
+            margin: 0 0 10px;
+        }
+        .info-card p {
+            margin: 5px 0;
+        }
+        .info-card img {
+            max-width: 100px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .info-card-content {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Fashion Hub</div>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Signup</a></li>
+            <li><a href="{% url 'profile' %}"><img src="{% static 'assets/images/user-profile.png' %}" alt="Profile" class="profile-icon"></a></li>
+            <li><a href="{% url 'chat' %}">Chat with Bot</a></li>
+        </ul>
+    </nav>
+    <div class="chat-container">
+        <h1>Chat with Bot</h1>
+        <div class="chat-messages" id="chatMessages">
+            {{example_message | safe }}
+        </div>
+        <form class="chat-input" method="POST" id="chatForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="user_input" id="user_input" placeholder="Type your message here" autocomplete="off"><br>
+            <button type="submit">Send</button>
+            <label class="custom-file-upload" for="fileInput">Upload Image</label>
+            <input type="file" id="fileInput" hidden>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("chatForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent page refresh
+
+            const userInput = document.getElementById("user_input").value;
+            const userImg = document.getElementById("fileInput").files[0];
+            const chatMessages = document.getElementById("chatMessages");
+
+            if (!userInput && !userImg) {
+                return; // Do nothing if both inputs are empty
+            }
+
+            // Create a new FormData object
+            const formData = new FormData();
+            formData.append("user_input", userInput); // Add user input to FormData
+            if (userImg) {
+                formData.append("image", userImg); // Add image to FormData
+            }
+
+            // Append user message to chat
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user");
+            userMessage.innerHTML = `<strong>You:</strong> ${userInput}`;
+            chatMessages.appendChild(userMessage);
+
+            // Show uploaded image in chat if available
+            if (userImg) {
+                userMessage.innerHTML += `<br><img src="${URL.createObjectURL(userImg)}" alt="Uploaded Image" style="max-width: 100px;">`;
+            }
+
+            // Scroll to the bottom of the chat box
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Send the user input and image to the server using AJAX (Fetch API)
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch("", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken
+                },
+                body: formData // Send FormData object
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Append bot's response to chat
+                const botMessage = document.createElement("div");
+                botMessage.classList.add("message", "bot");
+                botMessage.innerHTML = `<strong>Bot:</strong> ${data.bot_response}`;
+                chatMessages.appendChild(botMessage);
+
+                // Clear the input field
+                document.getElementById("user_input").value = "";
+
+                // Scroll to the bottom of the chat box
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+
+            document.getElementById("user_input").value = ''; 
+            document.getElementById("fileInput").value = '';
+        });
+    </script>
+</body>
+</html>

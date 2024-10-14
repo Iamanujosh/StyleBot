@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Bot</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #161b22;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .chat-messages {
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #696464;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .message.user {
+            background-color: #238636;
+            color: white;
+            text-align: right;
+        }
+        .message.bot {
+            background-color: #100f0f;
+            color: rgb(249, 246, 246);
+            text-align: left;
+        }
+        .chat-input {
+            display: flex;
+            justify-content: space-between;
+        }
+        .chat-input input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .chat-input button {
+            background-color: #238636;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .chat-input button:hover {
+            background-color: #2ea043;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Chat with Bot</h1>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be appended here dynamically -->
+        </div>
+        <form class="chat-input" method="POST" id="chatForm">
+            {% csrf_token %}
+            <input type="text" name="user_input" id="user_input" placeholder="Type your message here" autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <script>
+        // Handle form submission
+        document.getElementById("chatForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent page refresh
+
+            const userInput = document.getElementById("user_input").value;
+            if (!userInput) {
+                return; // Do nothing if input is empty
+            }
+
+            // Append user message to chat
+            const chatMessages = document.getElementById("chatMessages");
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user");
+            userMessage.innerHTML = `<strong>You:</strong> ${userInput}`;
+            chatMessages.appendChild(userMessage);
+
+            // Scroll to the bottom of the chat box
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Send the user input to the server using AJAX (Fetch API)
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            fetch("", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": csrfToken
+                },
+                body: new URLSearchParams({
+                    "user_input": userInput
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Append bot's response to chat
+                const botMessage = document.createElement("div");
+                botMessage.classList.add("message", "bot");
+                botMessage.innerHTML = `<strong>Bot:</strong> ${data.bot_response}`;
+                chatMessages.appendChild(botMessage);
+
+                // Clear the input field
+                document.getElementById("user_input").value = "";
+
+                // Scroll to the bottom of the chat box
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>

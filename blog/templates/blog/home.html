@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #E6E6FA; /* Lavender background */
+            color: #333;
+        }
+
+        header {
+            background-color: #D8BFD8; /* Light Lavender */
+            padding: 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .profile-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .image-slider {
+            position: relative;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .slider-image {
+            width: 100%;
+            display: none; /* Hide all images by default */
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #D8BFD8; /* Light Lavender */
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Active image */
+        .slider-image.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    <header>
+        <nav>
+            <div class="logo">Fashion Hub</div>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}">Signup</a></li>
+                <li><a href="{% url 'profile' %}"><img src="{% static 'assets/images/user-profile.png' %}" alt="Profile" class="profile-icon"></a></li>
+                <li><a href="{% url 'chat' %}">Chat with Bot</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="image-slider">
+        <img src="https://assets.vogue.com/photos/66c4fda38e8900f90e4bfc40/4:3/w_1600,c_limit/SWAIA_2024_Street%20Style_ShaylaBlatchford_04RZ%20(2).jpg" alt="Fashion Image 1" class="slider-image">
+        <img src="https://media.gettyimages.com/id/1292638473/photo/smiling-young-woman-sitting-on-a-yellow-wall-in-sunny-day.jpg?s=612x612&w=0&k=20&c=MO7lCZhmKpkADsRtJxJa4fLDJj8jo5wTiKLixhuFH9o=" alt="Fashion Image 2" class="slider-image">
+        <img src="https://media.gettyimages.com/id/1457102401/photo/portrait-of-young-woman-dancing-at-street-party.jpg?s=612x612&w=0&k=20&c=McOcfaze2vlCT6kpOUmMMxgb71BQ_9wpMTWCljyzVFo=" alt="Fashion Image 3" class="slider-image">
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Fashion Hub. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.slider-image');
+        const totalImages = images.length;
+
+        // Function to show the current image
+        function showImage(index) {
+            images.forEach((img, i) => {
+                img.classList.remove('active');
+                if (i === index) {
+                    img.classList.add('active');
+                }
+            });
+        }
+
+        // Function to change images every 5 seconds
+        function changeImage() {
+            currentIndex = (currentIndex + 1) % totalImages; // Loop back to the first image
+            showImage(currentIndex);
+        }
+
+        // Show the first image initially
+        showImage(currentIndex);
+
+        // Set interval to change images
+        setInterval(changeImage, 5000);
+    </script>
+</body>
+</html>
