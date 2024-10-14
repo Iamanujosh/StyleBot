@@ -173,10 +173,15 @@ def chatbot(request):
 def home_view(request):
     return render(request,'blog/home.html')
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from . import forms  # Adjust import according to your app structure
+
 def login_view(request):
     if request.method == 'POST':
         form = forms.LoginForm(request, data=request.POST)
-        
+
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
@@ -184,14 +189,14 @@ def login_view(request):
             
             if user is not None:
                 login(request, user)
-                return redirect('chatbot')  # Redirect to home page after successful login
+                return redirect('home')  # Redirect to home page after successful login
             else:
                 messages.error(request, 'Invalid username or password.')
         else:
             messages.error(request, 'Invalid form submission.')
 
     else:
-        form = forms.LoginForm()
+        form = forms.LoginForm()  # GET request, create a new form instance
 
     return render(request, 'blog/login.html', {'form': form})
 
@@ -200,7 +205,7 @@ def register_view(request):
         form = forms.RegisterForm(request.POST)
         if form.is_valid():
             form.save()  # This saves the user to the database
-            return redirect('login')  # Redirect to login page after registration
+            return redirect('home')  # Redirect to login page after registration
     else:
         form = forms.RegisterForm()
     
@@ -208,7 +213,7 @@ def register_view(request):
    
 def profile_view(request):
     profile = Profile.objects.get(user=request.user)  # Get the profile linked to the logged-in user
-    return render(request, 'profile.html', {'profile': profile})
+    return render(request, 'blog/profile.html', {'profile': profile})
 
 # Edit Profile view
 # @login_required

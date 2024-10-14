@@ -25,8 +25,8 @@ class Profile(models.Model):
     ]
     body_type = models.CharField(max_length=20, choices=BODY_TYPE_CHOICES)
     skin_tone = models.CharField(max_length=20, choices=SKIN_TONE_CHOICES)
-    height = models.IntegerField()  # Height in cm
-    weight = models.IntegerField()  # Weight in kg
+    height = models.IntegerField(null=True, blank=True)  # Height in cm
+    weight = models.IntegerField(null=True, blank=True)  # Weight in kg
     location = models.CharField(max_length=100)  # User's location/climate
     age_group = models.CharField(max_length=20, choices=AGE_GROUP_CHOICES)
     def __str__(self):
