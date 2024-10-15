@@ -81,9 +81,9 @@ def chat(request):
             response = model.generate_content(prompt_parts)
             
             if response:
-                context['message'] = response.text
-                print(response.text)
-                return JsonResponse({'bot_response': response.text})
+                context['message'] = bold_asterisk_text(response.text)
+                temp = bold_asterisk_text(response.text)
+                return JsonResponse({'bot_response': temp})
 
             # Clean up the temporary file
             os.remove(image_path)
