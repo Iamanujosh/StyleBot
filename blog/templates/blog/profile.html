@@ -71,13 +71,15 @@
       border-radius: 15px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       overflow: hidden;
+      display: flex;
+      flex-direction: column; /* Stack children vertically */
     }
 
     /* Profile Header */
     .profile-header {
       background: linear-gradient(135deg, #f77062, #fe5196);
       text-align: center;
-      padding: 30px;
+      padding: 70px;
       position: relative;
     }
 
@@ -117,6 +119,25 @@
       color: #fe5196;
     }
 
+    /* Button Styles */
+    .edit-button {
+      background-color: #fe5196; /* Button color */
+      color: white;
+      padding: 10px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 20px auto; /* Center the button */
+      width: 80%; /* Button width */
+      border: none; /* Remove border */
+      cursor: pointer; /* Pointer cursor on hover */
+      font-weight: bold;
+    }
+
+    .edit-button:hover {
+      background-color: #d43f82; /* Darker shade on hover */
+    }
+
     /* Recent Activities Section */
     .recent-activities {
       background: linear-gradient(135deg, #a18cd1, #fbc2eb);
@@ -147,11 +168,11 @@
       <li><a href="{% url 'chat' %}">Chat with Bot</a></li>
     </ul>
   </nav>
-<br>
+  <br>
   <div class="profile-container">
     <div class="profile-card">
       <div class="profile-header">
-        <img src="/static/images/profile-pic.jpg" alt="User Image" class="profile-img">
+        <img src='https://media.cnn.com/api/v1/images/stellar/prod/c-gettyimages-2157143448.jpg?c=16x9&q=w_1280,c_fill' alt="Profile Photo" class="profile-img">
         <h2>{{ profile.user.username }}</h2>
         <p class="location">{{ profile.location }}</p>
       </div>
@@ -178,6 +199,8 @@
           <p>Age Group: {{ profile.age_group }}</p>
         </div>
       </div>
+
+      <button class="edit-button"><a href="{% url 'newuser_profile' %}" style="color: white; text-decoration: none;">Edit Profile</a></button>
     </div>
   </div>
 </body>

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 # Profile model to extend the User model
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Links to the User model
+    photo = models.ImageField(upload_to='user_photos/', null=True, blank=True)
     BODY_TYPE_CHOICES = [
         ('Apple', 'Apple'),
         ('Pear', 'Pear'),

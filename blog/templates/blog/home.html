@@ -14,16 +14,26 @@
         }
 
         header {
-            background-color: #D8BFD8; /* Light Lavender */
-            padding: 20px;
+            background: linear-gradient(135deg, #f77062, #fe5196);
+            padding: 10px;
+
         }
 
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+
         }
 
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fe5196;
+    }
         .nav-links {
             list-style: none;
             display: flex;
@@ -39,6 +49,9 @@
             font-weight: bold;
         }
 
+        .nav-links a:hover {
+        color: #fe5196;
+    }
         .profile-icon {
             width: 24px;
             height: 24px;

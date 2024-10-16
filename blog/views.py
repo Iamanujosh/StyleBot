@@ -215,17 +215,29 @@ def profile_view(request):
     profile = Profile.objects.get(user=request.user)  # Get the profile linked to the logged-in user
     return render(request, 'blog/profile.html', {'profile': profile})
 
+def new_user(request):
+     profile = Profile.objects.get(user=request.user)
+    
+     if request.method == 'POST':
+        form = forms.ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()  # Save the updated profile information
+            return redirect('profile')  # Redirect to profile view after saving
+     else:
+        form = forms.ProfileForm(instance=profile)  # Pre-fill form with existing data
+
+     return render(request, 'blog/new_user_info.html', {'form': form})
 # Edit Profile view
 # @login_required
 def edit_profile(request):
-    profile = form.Profile.objects.get(user=request.user)
+    profile = Profile.objects.get(user=request.user)
     
     if request.method == 'POST':
-        form = form.ProfileForm(request.POST, instance=profile)
+        form = forms.ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()  # Save the updated profile information
             return redirect('profile')  # Redirect to profile view after saving
     else:
-        form = form.ProfileForm(instance=profile)  # Pre-fill form with existing data
+        form = forms.ProfileForm(instance=profile)  # Pre-fill form with existing data
 
-    return render(request, 'user_info.html', {'form': form})
+    return render(request, 'blog/user_info.html', {'form': form})

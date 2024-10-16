@@ -25,5 +25,6 @@ urlpatterns = [
     path('chatbot2/',views.chat,name='chat'),
     path('profile/',views.profile_view,name='profile'),
     path('edit/', views.edit_profile, name='user_profile'),
+     path('newedit/', views.new_user, name='newuser_profile'),
 
 ]

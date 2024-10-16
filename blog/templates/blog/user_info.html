@@ -75,9 +75,11 @@
     </style>
 </head>
 <body>
+   
     <h1>Personal Information</h1>
     <p>Please provide your details below.</p>
-    <form action="/submit" method="POST">
+    <form method="POST">
+        {% csrf_token %} 
         <!-- Hidden fields to store the selected values -->
         <input type="hidden" id="selectedBodyType" name="bodyType">
         <input type="hidden" id="selectedSkinTone" name="skinTone">
